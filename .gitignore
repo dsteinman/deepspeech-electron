@@ -1,3 +1,9 @@
+*.gz
+/build
+/dist
+/audio
+/models
+
 # Logs
 logs
 *.log

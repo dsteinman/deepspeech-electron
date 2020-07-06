@@ -1,4 +1,4 @@
-### DeepSpeech Electron example
+# DeepSpeech Electron example
 
 
 ## Install
@@ -10,21 +10,18 @@ npm install
 npm run rebuild
 ```
 
-Download and extract audio files to `/public/audio` directory
+Download and extract audio files to `/public` directory
 
 ```
 wget https://github.com/mozilla/DeepSpeech/releases/download/v0.7.0/audio-0.7.0.tar.gz
 tar xfvz audio-0.7.0.tar.gz -C ./public/
 ```
 
-(Optional) Download or softlink DeepSpeech 0.7.4 model files to `/public`:
+(Optional) Download or softlink DeepSpeech 0.7.4 model files to the root of the project:
 
 ```
-mkdir public
-cd public
 wget https://github.com/mozilla/DeepSpeech/releases/download/v0.7.4/deepspeech-0.7.4-models.pbmm
 wget https://github.com/mozilla/DeepSpeech/releases/download/v0.7.4/deepspeech-0.7.4-models.scorer
-cd ..
 ```
 
 If the files do not exist, they will be downloaded.
@@ -59,4 +56,4 @@ export BROWSER=none
 npm run dist-win
 ```
 
-Test (dmg/appimage/exe) package which will have been generated in `/dist`.
+Test the (dmg/appimage/exe) package file that has been generated in `/dist`.

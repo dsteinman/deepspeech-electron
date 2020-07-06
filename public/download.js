@@ -8,7 +8,7 @@ function download(url, dest, callback) {
 	const sendReq = request.get(url);
 	sendReq.on('response', (response) => {
 		if (response.statusCode === 200) {
-			console.log('...');
+			console.log('PLEASE WAIT...');
 			sendReq.pipe(file);
 		}
 	});

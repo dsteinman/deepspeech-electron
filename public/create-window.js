@@ -5,10 +5,13 @@ const ipcMain = electron.ipcMain;
 const BrowserWindow = electron.BrowserWindow;
 const isDev = require('electron-is-dev');
 if (isDev) process.env.NODE_ENV = 'dev';
+const {recognizeWav} = require('./recognize-wav');
+const fs = require('fs');
+const path = require('path');
 
 let mainWindow;
 
-function createWindow() {
+function createWindow(model) {
 	mainWindow = new BrowserWindow({
 		width: 480,
 		height: 540,
@@ -31,6 +34,28 @@ function createWindow() {
 
 	app.on('window-all-closed', () => {
 		app.quit()
+	});
+	
+	ipcMain.handle('recognize-wav', async function(event, file) {
+		let filePath = path.resolve(__dirname,'audio',file);
+		return recognizeWav(filePath, model);
+	});
+	
+	ipcMain.handle('load-files', function(event) {
+		return new Promise(function(resolve, reject) {
+			try {
+				let audioPath = path.resolve(__dirname, 'audio');
+				fs.readdir(audioPath, function (err, files) {
+					files = files.filter(function (file) {
+						return file.endsWith('.wav');
+					});
+					resolve(files);
+				});
+			}
+			catch(e) {
+				reject(e.toString())
+			}
+		});
 	});
 	
 	return mainWindow;

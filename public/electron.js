@@ -1,30 +1,17 @@
 const electron = require('electron');
-const ipcMain = electron.ipcMain;
 const app = electron.app;
-const fs = require('fs');
 const path = require('path');
 const createWindow = require('./create-window');
-const recognizeFile = require('./recognize-file');
+const {getModel} = require('./recognize-wav');
+const isDev = require('electron-is-dev');
 
-ipcMain.handle('recognize-file', async function(event, file) {
-	let filePath = path.resolve(__dirname,'..','audio',file);
-	return recognizeFile(filePath)
-});
-
-ipcMain.handle('load-files', function(event) {
-	return new Promise(function(resolve, reject) {
-		let audioPath = path.resolve(__dirname,'..','audio');
-		console.log('load-files', audioPath);
-		fs.readdir(audioPath, function (err, files) {
-			console.log('files', files);
-			files = files.filter(function(file) {
-				return file.endsWith('.wav');
-			});
-			resolve(files);
-		});
-	});
-});
+// in dev mode, use local directory
+// in prod mode, use appData
+const appDataPath = isDev? __dirname : path.resolve(electron.app.getPath('appData'), 'deepspeech-electron');
 
 app.on('ready', function () {
-	createWindow();
+	getModel(appDataPath, function(model) {
+		console.log('model loaded')
+		createWindow(model);
+	});
 });

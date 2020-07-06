@@ -5,13 +5,15 @@ class App extends Component {
 		super(props);
 		this.state = {
 			loading: true,
+			error: null,
 			files: [],
 			results: {}
 		}
 	}
 
 	componentDidMount() {
-		window.ipcRenderer.invoke('load-files').then(files => {
+		window.ipcRenderer.invoke('load-files')
+		.then(files => {
 			console.log('files', files);
 			this.setState({
 				loading: false,
@@ -19,7 +21,7 @@ class App extends Component {
 			}, () => {
 				files.forEach(file => {
 					console.log('recognize', file);
-					window.ipcRenderer.invoke('recognize-file', file).then(result => {
+					window.ipcRenderer.invoke('recognize-wav', file).then(result => {
 						console.log('result', result);
 						const results = {...this.state.results};
 						results[file] = result;
@@ -27,11 +29,17 @@ class App extends Component {
 					});
 				})
 			});
+		}).catch(e => {
+			this.setState({
+				loading: false,
+				error: e
+			});
 		});
 	}
 
 	render() {
 		if (this.state.loading) return 'Loading...';
+		if (this.state.error) return 'Error: '+this.state.error;
 		return (<div className="App">
 			<ul>
 			{

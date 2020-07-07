@@ -1,5 +1,6 @@
 # DeepSpeech Electron example
 
+This is an example of DeepSpeech running in an Electron app with a ReactJS front-end and processing .wav files.
 
 ## Install
 

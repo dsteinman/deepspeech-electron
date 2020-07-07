@@ -41,7 +41,7 @@ function createWindow(model) {
 		return recognizeWav(filePath, model);
 	});
 	
-	// message from front-end App.js, retrieve list of .wav files in /public/audioo
+	// message from front-end App.js, retrieve list of .wav files in /public/audio
 	ipcMain.handle('load-files', function (event) {
 		return new Promise(function (resolve, reject) {
 			try {

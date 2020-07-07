@@ -7,9 +7,9 @@ const {getModel} = require('./recognize-wav');
 
 let appDataPath;
 
-if (fs.existsSync(path.resolve(__dirname,'../deepspeech-0.7.4-models.pbmm'))) {
+if (fs.existsSync(path.resolve(__dirname, '../deepspeech-0.7.4-models.pbmm'))) {
 	// if the deepspeech model was found at the root, use that directory
-	appDataPath = path.resolve(__dirname,'..');
+	appDataPath = path.resolve(__dirname, '..');
 }
 else {
 	// otherwise use the electron "appData" path
@@ -17,7 +17,7 @@ else {
 }
 
 app.on('ready', function () {
-	getModel(appDataPath, function(model) {
+	getModel(appDataPath, function (model) {
 		console.log('model loaded')
 		createWindow(model);
 	});

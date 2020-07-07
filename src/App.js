@@ -10,8 +10,9 @@ class App extends Component {
 			results: {}
 		}
 	}
-
+	
 	componentDidMount() {
+		// when the component mounts, get the list of .wav files
 		window.ipcRenderer.invoke('load-files')
 		.then(files => {
 			console.log('files', files);
@@ -20,8 +21,10 @@ class App extends Component {
 				files
 			}, () => {
 				files.forEach(file => {
+					// request that each file be processed by deepspeech
 					console.log('recognize', file);
 					window.ipcRenderer.invoke('recognize-wav', file).then(result => {
+						// add the recognition results to this.state.results
 						console.log('result', result);
 						const results = {...this.state.results};
 						results[file] = result;
@@ -36,19 +39,19 @@ class App extends Component {
 			});
 		});
 	}
-
+	
 	render() {
 		if (this.state.loading) return 'Loading...';
-		if (this.state.error) return 'Error: '+this.state.error;
+		if (this.state.error) return 'Error: ' + this.state.error;
 		return (<div className="App">
 			<ul>
-			{
-				this.state.files.map((file, index) => {
-					return (<li key={index}>
-						{file} = {this.state.results[file] || '...'}
-					</li>)
-				})
-			}
+				{
+					this.state.files.map((file, index) => {
+						return (<li key={index}>
+							{file} = {this.state.results[file] || '...'}
+						</li>)
+					})
+				}
 			</ul>
 		</div>);
 	}

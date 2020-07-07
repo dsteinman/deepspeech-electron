@@ -16,8 +16,6 @@ function createWindow(model) {
 		width: 480,
 		height: 480,
 		webPreferences: {
-			// allow code inside this window to use use native window.open()
-			nativeWindowOpen: true,
 			nodeIntegration: true,
 			nodeIntegrationInWorker: false,
 			preload: __dirname + '/preload.js'
@@ -27,22 +25,25 @@ function createWindow(model) {
 	mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${Path.join(__dirname, '../build/index.html')}`);
 	
 	if (isDev) {
+		// open Chrome Development Console
 		// mainWindow.webContents.openDevTools();
 	}
 	
 	mainWindow.on('closed', () => mainWindow = null);
-
+	
 	app.on('window-all-closed', () => {
 		app.quit()
 	});
 	
-	ipcMain.handle('recognize-wav', async function(event, file) {
-		let filePath = path.resolve(__dirname,'audio',file);
+	// message from front-end App.js, request that this file be processed by DeepSpeech
+	ipcMain.handle('recognize-wav', async function (event, file) {
+		let filePath = path.resolve(__dirname, 'audio', file);
 		return recognizeWav(filePath, model);
 	});
 	
-	ipcMain.handle('load-files', function(event) {
-		return new Promise(function(resolve, reject) {
+	// message from front-end App.js, retrieve list of .wav files in /public/audioo
+	ipcMain.handle('load-files', function (event) {
+		return new Promise(function (resolve, reject) {
 			try {
 				let audioPath = path.resolve(__dirname, 'audio');
 				fs.readdir(audioPath, function (err, files) {
@@ -51,8 +52,7 @@ function createWindow(model) {
 					});
 					resolve(files);
 				});
-			}
-			catch(e) {
+			} catch (e) {
 				reject(e.toString())
 			}
 		});

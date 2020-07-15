@@ -1,3 +1,9 @@
+# THIS EXAMPLE HAS BEEN SUBMITTED TO THE DEEPSPEECH PROJECT
+
+https://github.com/mozilla/DeepSpeech-examples/pull/65
+
+
+
 # DeepSpeech Electron example
 
 This is an example of DeepSpeech running in an Electron app with a ReactJS front-end and processing .wav files.
